@@ -1,0 +1,322 @@
+app:
+  description: 架空規程で、検索結果・LLMへ渡した入力・回答を同じ実行で記録する検証用ワークフロー。実務用ではありません。
+  icon: 🔎
+  icon_background: '#FFEAD5'
+  mode: workflow
+  name: RAGトレース検証 2026-10-07
+  use_icon_as_answer_icon: false
+dependencies: []
+kind: app
+version: 0.3.0
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      enabled: false
+    opening_statement: ''
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: knowledge-retrieval
+      id: e-start-kr
+      source: start
+      sourceHandle: source
+      target: kr
+      targetHandle: target
+      type: custom
+    - data:
+        isInIteration: false
+        sourceType: knowledge-retrieval
+        targetType: if-else
+      id: e-kr-ifelse
+      source: kr
+      sourceHandle: source
+      target: ifelse
+      targetHandle: target
+      type: custom
+    - data:
+        isInIteration: false
+        sourceType: if-else
+        targetType: llm
+      id: e-ifelse-noctx
+      source: ifelse
+      sourceHandle: nocontext
+      target: llm_noctx
+      targetHandle: target
+      type: custom
+    - data:
+        isInIteration: false
+        sourceType: if-else
+        targetType: llm
+      id: e-ifelse-ctx
+      source: ifelse
+      sourceHandle: 'false'
+      target: llm_ctx
+      targetHandle: target
+      type: custom
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: end
+      id: e-ctx-end
+      source: llm_ctx
+      sourceHandle: source
+      target: end_ctx
+      targetHandle: target
+      type: custom
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: end
+      id: e-noctx-end
+      source: llm_noctx
+      sourceHandle: source
+      target: end_noctx
+      targetHandle: target
+      type: custom
+    nodes:
+    - data:
+        desc: question=質問文、mode=base または nocontext
+        selected: false
+        title: Start
+        type: start
+        variables:
+        - label: question
+          max_length: 256
+          options: []
+          required: true
+          type: text-input
+          variable: question
+        - label: mode
+          max_length: 48
+          options: []
+          required: true
+          type: text-input
+          variable: mode
+      height: 116
+      id: start
+      position:
+        x: 60
+        y: 300
+      positionAbsolute:
+        x: 60
+        y: 300
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        dataset_ids:
+        - 00000000-0000-0000-0000-000000000000
+        desc: 架空規程（5チャンク）。読者は自分のナレッジに差し替える
+        multiple_retrieval_config:
+          reranking_enable: false
+          reranking_mode: weighted_score
+          score_threshold: null
+          top_k: 4
+          weights:
+            keyword_setting:
+              keyword_weight: 0
+            vector_setting:
+              embedding_model_name: text-embedding-3-large
+              embedding_provider_name: langgenius/openai/openai
+              vector_weight: 1
+        query_variable_selector:
+        - start
+        - question
+        retrieval_mode: multiple
+        selected: false
+        title: Knowledge Retrieval
+        type: knowledge-retrieval
+      height: 92
+      id: kr
+      position:
+        x: 380
+        y: 300
+      positionAbsolute:
+        x: 380
+        y: 300
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        cases:
+        - case_id: nocontext
+          conditions:
+          - comparison_operator: is
+            id: cond-mode-nocontext
+            value: nocontext
+            varType: string
+            variable_selector:
+            - start
+            - mode
+          id: nocontext
+          logical_operator: and
+        desc: mode が nocontext なら検索結果を LLM に渡さない分岐へ
+        selected: false
+        title: IF/ELSE
+        type: if-else
+      height: 126
+      id: ifelse
+      position:
+        x: 700
+        y: 300
+      positionAbsolute:
+        x: 700
+        y: 300
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - kr
+          - result
+        desc: 基準。検索結果を context として渡す
+        model:
+          completion_params:
+            temperature: 0
+          mode: chat
+          name: gpt-4o-mini
+          provider: langgenius/openai/openai
+        prompt_template:
+        - id: sys-ctx
+          role: system
+          text: あなたは架空会社つばめラボの規程案内係です。提供されたナレッジだけを根拠に、日本語で簡潔に回答してください。記載のない金額・期限・条件は推測せず、資料では確認できないと明示してください。質問の条件が曖昧な場合は条件を確認するか、資料にある条件別に回答してください。根拠となる規程番号が分かる場合は併記してください。
+        - id: usr-ctx
+          role: user
+          text: "資料:\n{{#context#}}\n\n質問: {{#start.question#}}"
+        selected: false
+        title: LLM (context あり)
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 98
+      id: llm_ctx
+      position:
+        x: 1020
+        y: 200
+      positionAbsolute:
+        x: 1020
+        y: 200
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 受け渡し欠落の再現。検索は実行するが context を渡さない
+        model:
+          completion_params:
+            temperature: 0
+          mode: chat
+          name: gpt-4o-mini
+          provider: langgenius/openai/openai
+        prompt_template:
+        - id: sys-noctx
+          role: system
+          text: あなたは架空会社つばめラボの規程案内係です。提供されたナレッジだけを根拠に、日本語で簡潔に回答してください。記載のない金額・期限・条件は推測せず、資料では確認できないと明示してください。質問の条件が曖昧な場合は条件を確認するか、資料にある条件別に回答してください。根拠となる規程番号が分かる場合は併記してください。
+        - id: usr-noctx
+          role: user
+          text: "資料:\n\n\n質問: {{#start.question#}}"
+        selected: false
+        title: LLM (context なし)
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 98
+      id: llm_noctx
+      position:
+        x: 1020
+        y: 420
+      positionAbsolute:
+        x: 1020
+        y: 420
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        outputs:
+        - value_selector:
+          - kr
+          - result
+          variable: retrieval
+        - value_selector:
+          - llm_ctx
+          - text
+          variable: answer
+        selected: false
+        title: End (context あり)
+        type: end
+      height: 90
+      id: end_ctx
+      position:
+        x: 1340
+        y: 200
+      positionAbsolute:
+        x: 1340
+        y: 200
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        outputs:
+        - value_selector:
+          - kr
+          - result
+          variable: retrieval
+        - value_selector:
+          - llm_noctx
+          - text
+          variable: answer
+        selected: false
+        title: End (context なし)
+        type: end
+      height: 90
+      id: end_noctx
+      position:
+        x: 1340
+        y: 420
+      positionAbsolute:
+        x: 1340
+        y: 420
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    viewport:
+      x: 0
+      y: 0
+      zoom: 0.8

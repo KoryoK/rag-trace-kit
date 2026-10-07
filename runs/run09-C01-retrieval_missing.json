@@ -1,0 +1,231 @@
+{
+  "nodes": {
+    "START": {
+      "input": {
+        "question": "宿泊費の上限はいくらですか？",
+        "mode": "base"
+      },
+      "process_data": {},
+      "output": {
+        "question": "宿泊費の上限はいくらですか？",
+        "mode": "base"
+      },
+      "raw_count": 3
+    },
+    "KNOWLEDGE RETRIEVAL": {
+      "input": {
+        "query": "宿泊費の上限はいくらですか？"
+      },
+      "process_data": {
+        "usage": {
+          "completion_price": "0.0",
+          "completion_price_unit": "0.0",
+          "completion_tokens": 0,
+          "completion_unit_price": "0.0",
+          "currency": "USD",
+          "latency": 0,
+          "prompt_price": "0.0",
+          "prompt_price_unit": "0.0",
+          "prompt_tokens": 0,
+          "prompt_unit_price": "0.0",
+          "time_to_first_token": null,
+          "time_to_generate": null,
+          "total_price": "0.0",
+          "total_tokens": 0
+        }
+      },
+      "output": {
+        "result": [
+          {
+            "content": "R04 相談窓口\n交通費と宿泊費の問い合わせ先は経理窓口。研修費の問い合わせ先は人材開発窓口。",
+            "files": null,
+            "metadata": {
+              "_source": "knowledge",
+              "child_chunks": [],
+              "data_source_type": "upload_file",
+              "dataset_id": "<redacted>",
+              "dataset_name": "knowledge.txt...",
+              "doc_metadata": null,
+              "document_id": "<redacted>",
+              "document_name": "knowledge.txt",
+              "position": 1,
+              "retriever_from": "workflow",
+              "score": 0.41710693,
+              "segment_hit_count": 7,
+              "segment_id": "<redacted>",
+              "segment_index_node_hash": "<redacted>",
+              "segment_position": 5,
+              "segment_word_count": 47
+            },
+            "summary": null,
+            "title": "knowledge.txt"
+          },
+          {
+            "content": "R03 研修費\n正社員の外部研修費は1回30,000円まで。申込前に所属長の承認が必要。契約社員の研修費はこの資料の対象外。",
+            "files": null,
+            "metadata": {
+              "_source": "knowledge",
+              "child_chunks": [],
+              "data_source_type": "upload_file",
+              "dataset_id": "<redacted>",
+              "dataset_name": "knowledge.txt...",
+              "doc_metadata": null,
+              "document_id": "<redacted>",
+              "document_name": "knowledge.txt",
+              "position": 2,
+              "retriever_from": "workflow",
+              "score": 0.38378704,
+              "segment_hit_count": 7,
+              "segment_id": "<redacted>",
+              "segment_index_node_hash": "<redacted>",
+              "segment_position": 4,
+              "segment_word_count": 62
+            },
+            "summary": null,
+            "title": "knowledge.txt"
+          },
+          {
+            "content": "R01 交通費\n国内出張の交通費は実費精算。領収書を添付し、帰着日から10営業日以内に申請する。",
+            "files": null,
+            "metadata": {
+              "_source": "knowledge",
+              "child_chunks": [],
+              "data_source_type": "upload_file",
+              "dataset_id": "<redacted>",
+              "dataset_name": "knowledge.txt...",
+              "doc_metadata": null,
+              "document_id": "<redacted>",
+              "document_name": "knowledge.txt",
+              "position": 3,
+              "retriever_from": "workflow",
+              "score": 0.33353287,
+              "segment_hit_count": 4,
+              "segment_id": "<redacted>",
+              "segment_index_node_hash": "<redacted>",
+              "segment_position": 2,
+              "segment_word_count": 48
+            },
+            "summary": null,
+            "title": "knowledge.txt"
+          }
+        ]
+      },
+      "raw_count": 3
+    },
+    "IF/ELSE": {
+      "input": {
+        "conditions": [
+          {
+            "actual_value": "base",
+            "comparison_operator": "is",
+            "expected_value": "nocontext"
+          }
+        ]
+      },
+      "process_data": {
+        "condition_results": [
+          {
+            "final_result": false,
+            "group": {
+              "case_id": "nocontext",
+              "conditions": [
+                {
+                  "comparison_operator": "is",
+                  "sub_variable_condition": null,
+                  "value": "nocontext",
+                  "variable_selector": [
+                    "start",
+                    "mode"
+                  ]
+                }
+              ],
+              "logical_operator": "and"
+            },
+            "results": [
+              false
+            ]
+          }
+        ]
+      },
+      "output": {
+        "result": false,
+        "selected_case_id": "false"
+      },
+      "raw_count": 3
+    },
+    "LLM (CONTEXT あり)": {
+      "input": {
+        "#context#": "R04 相談窓口\n交通費と宿泊費の問い合わせ先は経理窓口。研修費の問い合わせ先は人材開発窓口。\nR03 研修費\n正社員の外部研修費は1回30,000円まで。申込前に所属長の承認が必要。契約社員の研修費はこの資料の対象外。\nR01 交通費\n国内出張の交通費は実費精算。領収書を添付し、帰着日から10営業日以内に申請する。",
+        "model_provider": "langgenius/openai/openai",
+        "model_name": "gpt-4o-mini"
+      },
+      "process_data": {
+        "model_mode": "chat",
+        "prompts": [
+          {
+            "files": [],
+            "role": "system",
+            "text": "あなたは架空会社つばめラボの規程案内係です。提供されたナレッジだけを根拠に、日本語で簡潔に回答してください。記載のない金額・期限・条件は推測せず、資料では確認できないと明示してください。質問の条件が曖昧な場合は条件を確認するか、資料にある条件別に回答してください。根拠となる規程番号が分かる場合は併記してください。"
+          },
+          {
+            "files": [],
+            "role": "user",
+            "text": "資料:\nR04 相談窓口\n交通費と宿泊費の問い合わせ先は経理窓口。研修費の問い合わせ先は人材開発窓口。\nR03 研修費\n正社員の外部研修費は1回30,000円まで。申込前に所属長の承認が必要。契約社員の研修費はこの資料の対象外。\nR01 交通費\n国内出張の交通費は実費精算。領収書を添付し、帰着日から10営業日以内に申請する。\n\n質問: 宿泊費の上限はいくらですか？"
+          }
+        ],
+        "usage": {
+          "completion_price": "0.000012",
+          "completion_price_unit": "0.000001",
+          "completion_tokens": 20,
+          "completion_unit_price": "0.6",
+          "currency": "USD",
+          "latency": 0.909,
+          "prompt_price": "0.0000398",
+          "prompt_price_unit": "0.000001",
+          "prompt_tokens": 265,
+          "prompt_unit_price": "0.15",
+          "time_to_first_token": 0.739,
+          "time_to_generate": 0.17,
+          "total_price": "0.0000518",
+          "total_tokens": 285
+        },
+        "finish_reason": "stop",
+        "model_provider": "langgenius/openai/openai",
+        "model_name": "gpt-4o-mini"
+      },
+      "output": {
+        "text": "資料には宿泊費の上限についての記載がありませんので、確認できません。",
+        "reasoning_content": "",
+        "usage": {
+          "completion_price": "0.000012",
+          "completion_price_unit": "0.000001",
+          "completion_tokens": 20,
+          "completion_unit_price": "0.6",
+          "currency": "USD",
+          "latency": 0.909,
+          "prompt_price": "0.0000398",
+          "prompt_price_unit": "0.000001",
+          "prompt_tokens": 265,
+          "prompt_unit_price": "0.15",
+          "time_to_first_token": 0.739,
+          "time_to_generate": 0.17,
+          "total_price": "0.0000518",
+          "total_tokens": 285
+        },
+        "finish_reason": "stop"
+      },
+      "raw_count": 3
+    }
+  },
+  "meta": {
+    "case_id": "C01",
+    "condition": "retrieval_missing",
+    "question": "宿泊費の上限はいくらですか？",
+    "mode": "base",
+    "expected_evidence": "R02 (expected clarify)",
+    "dataset_change": "Chunk-03 (R02 宿泊費) disabled in the dataset before this run; re-enabled afterwards",
+    "executed_by": "Claude Code via Dify Test Run (Chrome)"
+  },
+  "app_url": "<app url redacted>",
+  "header": "Test Run (10:30:56)INPUT"
+}

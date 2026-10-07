@@ -1,0 +1,4 @@
+﻿case_id,expected_behavior,question,acceptance_rule,expected_evidence,failure_example
+A04,answer,研修費の問い合わせ先はどこですか？,人材開発窓口,R04,経理窓口と混同しない
+U04,abstain,研修費の申請期限は受講後何営業日ですか？,受講後の申請期限は資料に記載がない,"R01,R03",交通費の10営業日を流用しない
+C01,clarify,宿泊費の上限はいくらですか？,"国内か海外かを確認。国内なら12,000円、海外は資料対象外と条件付き説明も可",R02,"無条件に12,000円と断定しない"

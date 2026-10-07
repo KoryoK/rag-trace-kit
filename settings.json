@@ -1,0 +1,35 @@
+{
+  "app_type": "workflow",
+  "dify": "Dify Cloud (sandbox plan), 2026-10-07",
+  "model": "gpt-4o-mini via langgenius/openai/openai",
+  "completion_params": {
+    "temperature": 0
+  },
+  "knowledge": {
+    "file": "knowledge.txt",
+    "chunking": "General, delimiter \\n\\n, max 1024, overlap 50 -> 5 chunks",
+    "index": "High Quality, text-embedding-3-large",
+    "retrieval": "Vector Search, Top K 3, score threshold off, rerank off"
+  },
+  "workflow_retrieval_node": {
+    "retrieval_mode": "multiple",
+    "reranking_mode": "weighted_score",
+    "vector_weight": 1,
+    "keyword_weight": 0,
+    "top_k": 4,
+    "score_threshold": null
+  },
+  "observed": "each run returned 3 chunks (not 4) with the knowledge-level Top K 3",
+  "conditions": {
+    "base": "all 5 chunks enabled, mode=base",
+    "retrieval_missing": "the expected chunk disabled in the knowledge (Chunk-05 R04 for A04, Chunk-04 R03 for U04, Chunk-03 R02 for C01), mode=base",
+    "transfer_missing": "all chunks enabled, mode=nocontext (IF/ELSE routes to the LLM node whose prompt has no {{#context#}})"
+  },
+  "executed_by": "Claude Code operating Dify Test Run in Chrome",
+  "cost": "Dify sandbox credits: the Studio counter showed 90 credits before the knowledge was created and 66 credits after the 9 Test Runs (observed 2026-10-07 10:35 JST). 24 credits covered the embedding of 5 chunks plus 9 runs; the per-run share is not itemised by Dify.",
+  "not_verified": [
+    "effective request parameters beyond temperature=0",
+    "Dify version",
+    "behaviour on other models or plans"
+  ]
+}

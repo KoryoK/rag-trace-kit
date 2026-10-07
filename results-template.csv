@@ -1,0 +1,10 @@
+﻿run_id,observed_at,app_version,case_id,condition,question,expected_evidence,retrieval_query,retrieved_ids,retrieval_scores,retrieved_text,llm_context,llm_instructions,llm_answer,evidence_present,context_transferred,answer_supported,citation_correct,next_check,evidence_path
+,,,A04,base,,,,,,,,,,,,,,,
+,,,A04,retrieval_missing,,,,,,,,,,,,,,,
+,,,A04,transfer_missing,,,,,,,,,,,,,,,
+,,,U04,base,,,,,,,,,,,,,,,
+,,,U04,retrieval_missing,,,,,,,,,,,,,,,
+,,,U04,transfer_missing,,,,,,,,,,,,,,,
+,,,C01,base,,,,,,,,,,,,,,,
+,,,C01,retrieval_missing,,,,,,,,,,,,,,,
+,,,C01,transfer_missing,,,,,,,,,,,,,,,
