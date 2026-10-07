@@ -2,7 +2,7 @@
 
 - ダウンロード（ZIP）: https://github.com/KoryoK/rag-trace-kit/releases/latest/download/rag-trace-kit-v1.0.zip
 - このリポジトリの各ファイルは、ZIPを展開したものと同じ内容です。
-- 解説記事（note）は公開後にここへリンクを追加します。
+- 解説記事（note）: https://note.com/brainy_phlox8948/n/n460a3b89ab14
 - 前作：[Dify RAG 12問チェックキット](https://github.com/KoryoK/rag-12-question-kit)
 
 Difyで作ったRAGの回答が期待と違ったとき、「検索で根拠を取れていないのか」「取れた根拠がLLMに渡っていないのか」「渡した後の回答がずれたのか」を、**同じ1回の実行の記録**で分けるための小さな検証セットです。架空の社内規程を使い、実在の規程や業務データは含みません。
